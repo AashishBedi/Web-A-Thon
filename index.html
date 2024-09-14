@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+</head>
+<body>
+    <h1>Chat App</h1>
+    
+    <label for="userQuery">Enter your query:</label>
+    <input type="text" id="userQuery" placeholder="Type your query here">
+    <button id="startChat">Start Chat</button>
+
+    <pre id="chatResponse"></pre>
+
+    <script>
+        document.getElementById('startChat').addEventListener('click', async () => {
+            const query = document.getElementById('userQuery').value; // Get user input
+            if (!query) {
+                alert('Please enter a query');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/start-chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query }) // Send user input to the server
+                });
+                const data = await response.json();
+                document.getElementById('chatResponse').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('Error fetching chat response:', error);
+            }
+        });
+    </script>
+</body>
+</html>
